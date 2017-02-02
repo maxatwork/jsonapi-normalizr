@@ -4,6 +4,12 @@ Quick and dirty implementation. Do not use in production!
 
 ## Usage
 
+### Installation
+
+```bash
+npm i --save jsonapi-normalizr
+```
+
 ### Imports
 
 ```javascript
