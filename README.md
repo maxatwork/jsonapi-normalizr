@@ -74,6 +74,16 @@ const jsonApiData = {
             relationships: {
                 author: {data: {type: 'users', id: '2'}}
             }
+        },
+        {
+            id: '1',
+            type: 'users',
+            attributes: {email: 'user1@example.com', full_name: 'John Doe'}
+        },
+        {
+            id: '2',
+            type: 'users',
+            attributes: {email: 'user2@example.com', full_name: 'Dow Jones'}
         }
     ]
 }
@@ -83,7 +93,7 @@ const jsonApiData = {
 
 ```javascript
 const normalized = normalize(
-    postSchema({include: ['comments']}),
+    postSchema({include: ['comments', 'comments.author']}),
     jsonApiData
 )
 ```
@@ -96,26 +106,38 @@ const normalized = normalize(
     "entities": {
         "posts": {
             "1": {
-                "id": 1,
+                "id": "1",
                 "created": new Date('2017-02-02T12:30:41Z'),
                 "title": "Hello world!",
                 "text": "This is the post about jsonapi-normalizr",
                 "comments": [
-                    {"type": "comments", "id": 1},
-                    {"type": "comments", "id": 2}
+                    {"type": "comments", "id": "1"},
+                    {"type": "comments", "id": "2"}
                 ]
             }
         },
         "comments": {
             "1": {
-                "id": 1,
-                "author": {"type": "users", "id": 1},
+                "id": "1",
+                "author": {"type": "users", "id": "1"},
                 "text": "First comment"
             },
             "2": {
-                "id": 2,
-                "author": {"type": "users", "id": 2},
+                "id": "2",
+                "author": {"type": "users", "id": "2"},
                 "text": "Second comment"
+            }
+        },
+        "users": {
+            "1": {
+                "id": "1",
+                "email": "user1@example.com",
+                "fullName": "John Doe"
+            },
+            "2": {
+                "id": "2",
+                "email": "user2@example.com",
+                "fullName": "Dow Jones"
             }
         }
     }

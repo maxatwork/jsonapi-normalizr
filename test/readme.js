@@ -53,12 +53,22 @@ describe('README.md example', () => {
                 relationships: {
                     author: {data: {type: 'users', id: '2'}}
                 }
+            },
+            {
+                id: '1',
+                type: 'users',
+                attributes: {email: 'user1@example.com', full_name: 'John Doe'}
+            },
+            {
+                id: '2',
+                type: 'users',
+                attributes: {email: 'user2@example.com', full_name: 'Dow Jones'}
             }
         ]
     }
 
     const normalized = normalize(
-        postSchema({include: ['comments']}),
+        postSchema({include: ['comments', 'comments.author']}),
         jsonApiData
     )
 
@@ -88,6 +98,18 @@ describe('README.md example', () => {
                         id: '2',
                         author: {type: 'users', id: '2'},
                         text: 'Second comment'}
+                },
+                users: {
+                    '1': {
+                        id: '1',
+                        email: 'user1@example.com',
+                        fullName: 'John Doe'
+                    },
+                    '2': {
+                        id: '2',
+                        email: 'user2@example.com',
+                        fullName: 'Dow Jones'
+                    }
                 }
             }
         })
