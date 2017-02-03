@@ -13,6 +13,7 @@ describe('README.md example', () => {
     }, {jsonApiType: 'blog_comments'})
 
     const postSchema = schema('posts', {
+        created: fields.date(),
         title: fields.string(),
         text: fields.string(),
         comments: fields.relationship(commentSchema, {many: true})
@@ -23,6 +24,7 @@ describe('README.md example', () => {
             id: '1',
             type: 'blog_posts',
             attributes: {
+                created: '2017-02-02T12:30:41Z',
                 title: 'Hello world!',
                 text: 'This is the post about jsonapi-normalizr'
             },
@@ -67,6 +69,7 @@ describe('README.md example', () => {
                 posts: {
                     '1': {
                         id: '1',
+                        created: new Date('2017-02-02T12:30:41Z'),
                         title: 'Hello world!',
                         text: 'This is the post about jsonapi-normalizr',
                         comments: [

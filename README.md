@@ -30,6 +30,7 @@ const commentSchema = schema('comments', {
 }, {jsonApiType: 'blog_comments'})
 
 const postSchema = schema('posts', {
+    created: fields.date(),
     title: fields.string(),
     text: fields.string(),
     comments: fields.relationship(commentSchema, {many: true})
@@ -44,6 +45,7 @@ const jsonApiData = {
         id: '1',
         type: 'blog_posts',
         attributes: {
+            created: '2017-02-02T12:30:41Z',
             title: 'Hello world!',
             text: 'This is the post about jsonapi-normalizr'
         },
@@ -88,13 +90,14 @@ const normalized = normalize(
 
 ### Result data
 
-```json
+```javascript
 {
     "result": {"type": "posts", "id": "1"},
     "entities": {
         "posts": {
             "1": {
                 "id": 1,
+                "created": new Date('2017-02-02T12:30:41Z'),
                 "title": "Hello world!",
                 "text": "This is the post about jsonapi-normalizr",
                 "comments": [
