@@ -1,6 +1,7 @@
 import {
     groupBy, hasIn, merge, filter, keys, curry, compose,
-    map, mapObjIndexed, fromPairs, toPairs
+    map, mapObjIndexed, fromPairs, toPairs, pathOr,
+    flatten
 } from 'ramda'
 
 export const normalizeEntityField = curry(
@@ -18,15 +19,19 @@ export const normalizeEntity = curry(
     )
 )
 
-export const ensureArray = (x) => Array.isArray(x) ? x : [x]
+const ensureArray = (x) => Array.isArray(x) ? x : [x]
+const getSchemaPath = (fieldName) => ['definition', fieldName, 'schema']
 
 export default function normalize(schema, {data, included = []}) {
     const fieldSchemas = compose(
         fromPairs,
         map(x => [x.jsonApiType, x]),
         filter(Boolean),
-        map(key => schema.definition[key].schema || null),
-        filter((key) => hasIn(key, schema.definition)),
+        map(compose(
+            fieldPath => pathOr(null, fieldPath, schema),
+            fieldPath => flatten(map(getSchemaPath, fieldPath)),
+            fieldName => fieldName.split('.')
+        ))
     )(schema.include)
 
     const result = {
