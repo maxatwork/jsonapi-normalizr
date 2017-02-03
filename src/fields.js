@@ -63,3 +63,18 @@ export function relationship(
         }
     }
 }
+
+const getDateOrNull = (date) => date == null ? null : new Date(date)
+
+export function date(
+    {
+        fromName = null,
+        required = false,
+        valueGetter = compose(getDateOrNull, attributeGetter),
+        defaultValue = null
+    } = {}
+) {
+    return {
+        normalize: (name, entity) => valueGetter(fromName || name, entity)
+    }
+}
