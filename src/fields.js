@@ -49,11 +49,15 @@ export function relationship(
     return {
         schema: schema,
         normalize: (name, entity) => {
-            if (required && (!entity.relationships || entity.relationships[fromName || name] == null)) {
+            const valueIsNull = !entity.relationships ||
+                entity.relationships[fromName || name] == null ||
+                entity.relationships[fromName || name].data == null
+
+            if (required && valueIsNull) {
                 throw new Error(`Field ${name} required`)
             }
 
-            if (!entity.relationships || entity.relationships[fromName || name] == null) {
+            if (valueIsNull) {
                 return defaultValue
             }
 
