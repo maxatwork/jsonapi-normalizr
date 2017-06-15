@@ -248,5 +248,35 @@ describe('src/normalize.js', () => {
 
             expect(actual).to.deep.equal(expected)
         })
+
+        it('must normalize JSON API data with nulled relationships', () => {
+            const actual = normalize(fooSchema({include: ['baz']}), {
+                data: {
+                    id: 'foo2',
+                    type: 'foos',
+                    attributes: {bar: 'bar'},
+                    relationships: {
+                        baz: {data: null}
+                    }
+                }
+            })
+
+            const expected = {
+                result: {'id': 'foo2', 'type': 'foos'},
+                entities: {
+                    foos: {
+                        foo2: {
+                            id: 'foo2',
+                            foo: null,
+                            bar: 'bar',
+                            baz: null,
+                            quxs: null
+                        }
+                    }
+                },
+            }
+
+            expect(actual).to.deep.equal(expected)
+        })
     })
 })
